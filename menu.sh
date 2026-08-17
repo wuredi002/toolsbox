@@ -113,13 +113,13 @@ function InstallToSystem(){
     fi
 }
 function SystemTools(){
-    CmdName="系统功能"
+    CmdName="bbr设置"
     while true
     do
         clear
         cat << EOF | sed "s/[═◉]/${cyan}&${reset}/g" | sed "s/\[[0-9a-z]\]/${red}&${reset}/g"
     ◉═════════════════════◉
-          系 统 功 能    
+          bbr 功 能    
     ◉═════════════════════◉
         [1] bbr3
         [2] bbr
