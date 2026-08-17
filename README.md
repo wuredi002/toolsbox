@@ -4,7 +4,7 @@
 
 一个基于Bash的系统管理工具箱，集成常用功能，支持界面美化与快捷操作。
 
-📧 作者邮箱：956143827@qq.com  
+📧 作者邮箱：1150315739.com
 🐱 GitHub仓库：[https://github.com/wuredi002/toolsbox](https://github.com/wuredi002/toolsbox)
 
 ---
