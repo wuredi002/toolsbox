@@ -61,7 +61,7 @@
 
 ### 快速安装
 ```bash
-git clone https://github.com/wuredi002/toolsbox-SHELL.git
+git clone https://github.com/wuredi002/toolsbox.git
 cd toolsbox-SHELL
 chmod +x menu.sh
 sudo ./menu.sh  # 需要root权限
