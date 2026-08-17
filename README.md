@@ -5,7 +5,7 @@
 一个基于Bash的系统管理工具箱，集成常用功能，支持界面美化与快捷操作。
 
 📧 作者邮箱：956143827@qq.com  
-🐱 GitHub仓库：[https://github.com/panglele/toolsbox-SHELL](https://github.com/panglele/toolsbox-SHELL)
+🐱 GitHub仓库：[https://github.com/wuredi002/toolsbox](https://github.com/wuredi002/toolsbox)
 
 ---
 
@@ -61,7 +61,7 @@
 
 ### 快速安装
 ```bash
-git clone https://github.com/yourname/toolsbox-SHELL.git
+git clone https://github.com/wuredi002/toolsbox-SHELL.git
 cd toolsbox-SHELL
 chmod +x menu.sh
 sudo ./menu.sh  # 需要root权限
