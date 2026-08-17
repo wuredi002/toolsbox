@@ -24,8 +24,7 @@ fi
        ██║   ╚██████╔╝╚██████╔╝███████╗███████║    ██████╔╝╚██████╔╝██╔╝ ██╗
        ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚══════╝    ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
 
-        [ 作 者 ] : 庞 乐
-        [ 邮 箱 ] : 956143827@qq.com
+        [ 作 者 ] : hijk
         [ 提 示 ] : 开发于CentOS-7系统,部分功能非全版本适用,请自行测试
         [ 示 例 ] : 功能执行完毕 使用回车退至上级菜单
 
@@ -42,186 +41,34 @@ EOF
     exit 0
 }
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━系统功能菜单━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ #
-# ───────────────────────1.查看系统信息───────────────────────── #
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━bbr加速菜单━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ #
+# ───────────────────────1.bbr3───────────────────────── #
 function GetSystemInfo(){
-    echo "正在获取当前主机系统信息"
-        speedbar 2
-    # ──────CPU信息──────
-    cpu_model=$(grep "model name" /proc/cpuinfo |awk -F ": " '{print $2}'|uniq)      # cpu型号
-    cpu_cores=$(grep processor /proc/cpuinfo |wc -l)            # cpu核心数
-    cpu_frequency=$(grep "cpu MHz" /proc/cpuinfo |awk -F ": " '{print $2}'|uniq)     # cpu主频
-    cpu_cache=$(grep "cache size" /proc/cpuinfo |awk -F ": " '{print $2}'|uniq)      # cpu缓存
-    printf "   \e[32m%-10s\e[0m\n" "[中央处理器信息]" 
-    print_long_line
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "CPU型号" "${cpu_model}"
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "CPU核心数" "${cpu_cores} 核"
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "cpu主频" "${cpu_frequency} MHz"
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "cpu缓存" "${cpu_cache}"
-    printf "\n"
-    # ──────内存信息──────
-    mem_size=$(grep "MemTotal" /proc/meminfo | awk -F " " '{print $2}')     # 内存总量
-    mem_free=$(grep "MemFree" /proc/meminfo |awk -F " " '{print $2}')       # 内存余量
-    mem_frequency=$(dmidecode |grep "Max Speed"|awk -F ": " '{print $2}'|uniq)  # 内存频率
-    printf "   \e[32m%-10s\e[0m\n" "[内存信息]" 
-    print_long_line
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "内存总量" "$[$mem_size/1024] MB"
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "内存剩余" "$[$mem_free/1024] MB"
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "内存频率" "${mem_frequency}"
-    printf "\n"
-    # ──────主机信息──────
-    os_version=$(hostnamectl | grep "Operating System"|awk -F ": " '{print $2}')    # 系统版本
-    os_kernel=$(hostnamectl | grep "Kernel"|awk -F ": " '{print $2}')       # 内核版本
-    hostname=$(hostnamectl | grep "Static hostname"|awk -F ": " '{print $2}')   # 静态主机名
-    printf "   \e[32m%-10s\e[0m\n" "[主机信息]"
-    print_long_line
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "系统版本" "$os_version"
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "内核版本" "$os_kernel"
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "静态主机名" "$hostname"
-    printf "\n"
-    # ──────网络信息──────
-    network_card=$(ip a | grep '2: '| awk '{print $2}' |tr -d ":") # 首张网卡名
-    ip=$(ip a show dev ${network_card}| grep 'inet ' | awk '{print $2}')    # 网卡ip
-    gateway=$(ip route | grep default | awk '{print $3}')     #网关
-    printf "   \e[32m%-10s\e[0m\n" "[网络信息]"
-    print_long_line
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "网卡名" "$network_card"
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "IP地址" "$ip"
-    printf "\e[38;2;47;74;119m   %-12s\e[0m\t│\e[38;2;182;154;49m %-50s\e[0m\n" "网关" "$gateway"
-    printf "\n"
-    # ──────磁盘信息──────
-    printf "   \e[32m%-10s\e[0m\n" "[磁盘信息]"
-    print_long_line
-    printf "\e[38;2;47;74;119m   %-13s│  %-8s │ %-30s│ %-5s\e[0m\n" "[挂载点]" "[已用]" "[文件系统]" "[容量]"
-    df -Th | awk 'BEGIN{ORS="\n"}$2 ~ /(ext|xfs)/{printf "\033[38;2;182;154;49m   %-10s│  %-7s│ %-26s│ %-5s\033[0m\n",$NF,$(NF-1),$1,$3}'
-    printf "\n"
+bash <(curl -fsSL https://raw.githubusercontent.com/byJoey/Actions-bbr-v3/main/install.sh)
 }
-# ───────────────────────2.系统功能设置───────────────────────── #
-# ---------------固定IP----------------- #
+# ───────────────────────2.bbr───────────────────────── #
+# ---------------2.bbr----------------- #
 function FixedIP(){
-    infoecho 1 开始固定IP
-        sleep 1
-    infoecho 2 获取当前网卡配置文件
-        sleep 1
-        network_card=$(ip a | grep '2: '| awk '{print $2}' |tr -d ":") # 首张网卡名
-    infoecho 3 获取IP
-        ip=$(ip a show dev ${network_card}| grep 'inet ' | awk '{print $2}')    # 网卡ip
-        speedbar 2
-    myecho 4 原有的网卡配置文件获取成功,正在删除...
-    tip ${CmdName} 是否开启DNS:[y/n] dnsname
-    # 不开启则添加为注释行
-    case $dnsname in
-        y)
-            dnsa=DNS1=114.114.114.114
-            dnsb=DNS2=8.8.8.8
-            ;;
-        n)
-            dnsa=#DNS1=114.114.114.114
-            dnsb=#DNS2=8.8.8.8
-        ;;
-    esac
-    infoecho 5 正在创建新的网卡配置文件
-        speedbar 5
-    cd /etc/sysconfig/network-scripts/
-    # 写入网卡配置
-    cat >ifcfg-$wkname <<EOF
-TYPE="Ethernet"
-PROXY_METHOD="none"
-BROWSER_ONLY="no"
-BOOTPROTO="none"
-DEFROUTE="yes"
-NAME="$wkname"
-DEVICE="$wkname"
-ONBOOT="yes"
-IPADDR=$ipname
-PREFIX=24
-GATEWAY=$wgname
-$dnsa
-$dnsb
-EOF
-    cd - &> /dev/null
-    myecho 6 创建成功,正在重启网络服务
-        nmcli connection down ens33 &> /dev/null &&  nmcli connection up ens33  &> /dev/null
-    myecho 7 固定IP成功
-        sleep 3
-}
-# ---------------配置YUM源----------------- #
-function ConfigYUM(){
-        infoecho 1 正在检测网络状态
-    if ! ping -W 1 -c 2 www.baidu.com &> /dev/null;then
-        error ${CmdName} 网络连接失败,请检查网络!
-    fi
-        # 备份当前YUM源
-        infoecho 2 正在备份当前YUM源
-        sleep 1
-        cd /etc/yum.repos.d/
-        if tar -zcf repo-$(date +%Y-%m-%d_%H-%M-%S).tar.gz ./* --remove-files;then
-            infoecho 3 当前YUM源备份成功 
-            sleep 1
-        else
-            error ${CmdName} 当前YUM源备份失败
-        fi
-        cd - &> /dev/null
-        # 配置阿里云YUM和epel
-        infoecho 4 正在配置阿里云YUM源,受网络影响,请耐心等待
-        sleep 1
-        if curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo &> /dev/null && \
-           curl -o /etc/yum.repos.d/epel.repo https://mirrors.aliyun.com/repo/epel-7.repo &> /dev/null;
-        then
-            yum makecache &>/dev/null
-            myecho 5 阿里云YUM源配置成功!
-        else
-            error ${CmdName} 配置阿里云YUM源失败,请检查网络或其他配置
-        fi
-        read
-}
-# ---------------设置主机名----------------- #
-function SetHostname(){
-    infoecho 1 当前主机名:$(hostname)
-    infoecho 2 开始修改主机名
-    sleep 1
-    tip ${CmdName} "请输入你想修改的主机名" namehost
-    hostnamectl set-hostname $namehost
-    myecho 3 主机名修改成功,已设置为:$(hostname)
-    read
+wget -O tcpx.sh "https://git.io/JYxKU" && chmod +x tcpx.sh && ./tcpx.sh
 }
 function SystemSettings(){
-    CmdName="系统功能"
+    CmdName="加速功能"
     while true
     do
         clear
         cat << EOF | sed "s/[═◉]/${cyan}&${reset}/g" | sed "s/\[[0-9a-z]\]/${red}&${reset}/g"
     ◉═════════════════════◉
-          系统功能设置    
+          bbr功能设置    
     ◉═════════════════════◉
-        [1] 固定IP
-        [2] 配置YUM源
-        [3] 时间校准
-        [4] 设置主机名
+        [1] bbr
         [r] 返回主菜单
         [q] 退出
     ◉═════════════════════◉
 EOF
         tip ${CmdName} 请输入功能序号 systemsettings
         case $systemsettings in
-        1)  # 固定IP
+        1)  # bbr
             FixedIP
-        ;;
-        2)  # 配置阿里云YUM源
-            ConfigYUM
-        ;;
-        3)  # 时间校准
-            infoecho 1 开始校准时间
-            yum -y install ntpdate &>/dev/null
-            ntpdate ntp.ntsc.ac.cn &>/dev/null
-            now=$(date)
-            myecho 2 时间校准成功
-            infoecho 3 "当前时间为:$now"
-            sleep 2
-            read
-        ;;
-        4)  # 设置主机名
-            SetHostname
         ;;
         r)
             Menu
@@ -274,8 +121,8 @@ function SystemTools(){
     ◉═════════════════════◉
           系 统 功 能    
     ◉═════════════════════◉
-        [1] 查看系统信息
-        [2] 系统功能设置
+        [1] bbr3
+        [2] bbr
         [3] 安装至系统
         [r] 返回主菜单
         [q] 退出  
@@ -283,12 +130,12 @@ function SystemTools(){
 EOF
         tip ${CmdName} 请输入功能序号 systemtools
         case $systemtools in
-        1)  # 查看系统信息
+        1)  # bbr3
             clear
                 GetSystemInfo
             read
         ;;
-        2)  # 系统功能设置
+        2)  # bbr
             SystemSettings
         ;;
         3)  # 安装至系统
